@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    "https://announcements-portal-frontend-production-e3c2.up.railway.app",
   })
 );
 
