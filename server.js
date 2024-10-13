@@ -20,11 +20,23 @@ await runDbMigrations();
 // Middleware to parse JSON bodies (for POST and PUT requests)
 app.use(express.json());
 
+const allowedOrigins = [
+  "https://announcements-portal-frontend-production-e3c2.up.railway.app",
+  "http://localhost:3000", // for local development
+];
+
 app.use(
   cors({
-    "https://announcements-portal-frontend-production-e3c2.up.railway.app",
+    origin: function (origin, callback) {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
   })
 );
+
 
 // Create a simple check route
 app.get("/api/", (req, res) => {
