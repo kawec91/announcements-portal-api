@@ -22,7 +22,8 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://announcements-portal-frontend-production.up.railway.app",
+    origin:
+      "https://announcements-portal-frontend-production-e3c2.up.railway.app",
   })
 );
 
