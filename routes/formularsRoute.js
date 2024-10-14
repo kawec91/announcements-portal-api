@@ -1,46 +1,66 @@
 import express from "express";
-import authMiddleware from "../middleware/authMiddleware.js"; // Import the middleware
+import authMiddleware from "../middleware/authMiddleware.js";
 import multer from "multer";
 import db from "../database/db.js";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Create __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-//STORAGE
+// Ensure uploads directory exists
+const uploadDir = path.join(__dirname, "../uploads/docs");
+console.log(`Upload directory path: ${uploadDir}`);
+
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+  console.log(`Directory created: ${uploadDir}`);
+} else {
+  console.log(`Directory already exists: ${uploadDir}`);
+}
+
 // Set storage engine using multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/docs/"); // Upload files to /docs/
+    console.log(`Storing file to: ${uploadDir}`);
+    cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Prepend timestamp to avoid duplicates
+    const filename = `${Date.now()}-${file.originalname}`;
+    console.log(`Generated filename: ${filename}`);
+    cb(null, filename);
   },
 });
 
 const upload = multer({ storage: storage });
 
-// POST endpoint for uploading a document
-// /formulars/upload
 router.post(
   "/upload",
   authMiddleware,
   upload.single("document"),
   async (req, res) => {
     const { title, description } = req.body;
-
     try {
       if (!req.file) {
+        console.error("No file uploaded");
         return res.status(400).json({ error: "No file uploaded" });
       }
 
-      const fileUrl = path.join("/uploads/docs", req.file.filename);
+      const fileUrl = path
+        .join("/uploads/docs", req.file.filename)
+        .replace(/\\/g, "/");
 
-      // Save file information and form data in the database
+      console.log(`File uploaded successfully: ${fileUrl}`);
+
       const sql = `
-      INSERT INTO formulars (title, file_url, description)
-      VALUES ($1, $2, $3) RETURNING *;
+      INSERT INTO formulars (title, file_url, description, created_by, lastmodify_by)
+      VALUES ($1, $2, $3, $4, $5) RETURNING *;
     `;
-      const values = [title, fileUrl, description, created_by, lastmodify_by];
-
+      const values = [title, fileUrl, description, req.user.id, req.user.id];
       const result = await db.query(sql, values);
       const newFormular = result.rows[0];
 

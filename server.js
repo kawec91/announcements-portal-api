@@ -7,6 +7,9 @@ import reportsRoute from "./routes/reportsRoutes.js";
 import aplicationsRoute from "./routes/aplicationsRoutes.js";
 import formularsRoute from "./routes/formularsRoute.js";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs";
 
 // Initialize the app
 const app = express();
@@ -16,6 +19,22 @@ const PORT = process.env.PORT || 3000;
 
 //Check Database
 await runDbMigrations();
+
+// Create __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Ensure uploads directory exists
+const uploadDir = path.join(__dirname, "../uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+  console.log(`Directory created: ${uploadDir}`);
+} else {
+  console.log(`Directory already exists: ${uploadDir}`);
+}
+
+// Serve static files from the "uploads" directory
+app.use("/uploads", express.static("uploads"));
 
 // Middleware to parse JSON bodies (for POST and PUT requests)
 app.use(express.json());
