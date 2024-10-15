@@ -11,7 +11,8 @@ const createAplicationsTable = `
     testday_date VARCHAR(255),
     fdp BOOLEAN DEFAULT FALSE,
     bs BOOLEAN DEFAULT FALSE,
-    student_id VARCHAR(255)
+    student_id VARCHAR(255),
+    file_path VARCHAR(255)
   );
 `;
 
