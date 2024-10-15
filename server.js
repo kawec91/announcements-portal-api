@@ -40,18 +40,18 @@ app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 
 //
-// app.use(
-//   cors({
-//     origin:
-//       "https://announcements-portal-frontend-production-e3c2.up.railway.app",
-//   })
-// );
-
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin:
+      "https://announcements-portal-frontend-production-e3c2.up.railway.app",
   })
 );
+
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//   })
+// );
 
 // Create a simple check route
 app.get("/api/", (req, res) => {
