@@ -16,4 +16,6 @@ const createAplicationsTable = `
   );
 `;
 
-export default createAplicationsTable;
+// export default createAplicationsTable;
+
+module.exports = createAplicationsTable;

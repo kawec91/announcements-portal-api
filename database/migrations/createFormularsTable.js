@@ -11,4 +11,6 @@ const createFormularsTable = `
   );
 `;
 
-export default createFormularsTable;
+// export default createFormularsTable;
+
+module.exports = createFormularsTable;

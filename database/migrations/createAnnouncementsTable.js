@@ -13,4 +13,6 @@ const createAnnouncementsTable = `
   );
 `;
 
-export default createAnnouncementsTable;
+//export default createAnnouncementsTable;
+
+module.exports = createAnnouncementsTable;

@@ -9,4 +9,6 @@ const createUserTable = `
   );
 `;
 
-export default createUserTable;
+//export default createUserTable;
+
+module.exports = createUserTable

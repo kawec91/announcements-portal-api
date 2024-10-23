@@ -1,5 +1,7 @@
-import pg from "pg";
-import "dotenv/config";
+// import pg from "pg";
+// import "dotenv/config";
+const pg = require("pg");
+require("dotenv/config");
 
 // Create a pool of connections for better performance
 const db = new pg.Pool({
@@ -25,4 +27,5 @@ const db = new pg.Pool({
       : process.env.DB_PORT,
 });
 
-export default db;
+//export default db;
+module.exports = db;

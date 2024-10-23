@@ -1,4 +1,5 @@
-import jwt from "jsonwebtoken";
+//import jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
 
 // Middleware to authenticate user using JWT
 const authMiddleware = (req, res, next) => {
@@ -27,4 +28,5 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-export default authMiddleware;
+//export default authMiddleware;
+module.exports = authMiddleware;
